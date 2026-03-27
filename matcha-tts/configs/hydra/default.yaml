@@ -1,0 +1,10 @@
+# This tells Hydra how to handle the output folders on the HPC
+run:
+  dir: ${paths.output_dir}/runs/${now:%Y-%m-%d}_${now:%H-%M-%S}
+sweep:
+  dir: ${paths.output_dir}/multiruns/${now:%Y-%m-%d}_${now:%H-%M-%S}
+  subdir: ${hydra.job.num}
+
+job_logging:
+  root:
+    level: INFO
