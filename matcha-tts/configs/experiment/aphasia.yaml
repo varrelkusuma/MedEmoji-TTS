@@ -1,23 +1,23 @@
 # @package _global_
 
 defaults:
-  - override /data: multi_emotion_data
+  - override /data: aphasia
   - override /model: matcha
   - override /callbacks: default
   - override /trainer: default
 
 task_name: "finetune"
-run_name: "emotion_v1"
+run_name: "aphasia"
 
 seed: 1234
 
 trainer:
-  max_epochs: 100
+  max_epochs: 50
   gradient_clip_val: 1.0
   devices: 1
 
 model:
-  n_spks: 3
+  n_spks: 109
   n_vocab: 198
   spk_emb_dim: 64
   

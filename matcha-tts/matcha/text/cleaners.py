@@ -79,11 +79,7 @@ def collapse_whitespace(text):
 
 def english_cleaners2(text):
     """Pipeline for English text. Forced to use verified local espeak-ng."""
-    # --- THE TRIPLE LOCK FIX ---
-    # 1. Force the library path so phonemizer can see espeak-ng on the HPC
-    os.environ['PHONEMIZER_ESPEAK_LIBRARY'] = r'C:\Program Files\eSpeak NG\libespeak-ng.dll'
     
-    # 2. Local import to prevent the 'NameError'
     try:
         from phonemizer import phonemize
     except ImportError:
@@ -92,13 +88,11 @@ def english_cleaners2(text):
     text = text.encode("utf-8").decode("utf-8")
     text = lowercase(text)
     
-    # Expand abbreviations
     for regex, replacement in _abbreviations_en:
         text = re.sub(regex, replacement, text)
     for regex, replacement in _replacements_en:
         text = regex.sub(replacement, text)
     
-    # 3. Execute Phonemization
     try:
         phonemes = phonemize(
             text, 

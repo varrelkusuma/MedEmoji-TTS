@@ -1,13 +1,13 @@
 _target_: matcha.data.text_mel_datamodule.TextMelDataModule
 name: multi_emotion_data
-train_filelist_path: /rds/general/user/ak8224/home/emoji_project/data/final-train.txt
-valid_filelist_path: /rds/general/user/ak8224/home/emoji_project/data/final-val.txt
+train_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/aphasia/train.txt
+valid_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/aphasia/val.txt
 batch_size: 16
 num_workers: 4
 pin_memory: True
 cleaners: [english_cleaners2]
 add_blank: True
-n_spks: 3
+n_spks: 109
 n_fft: 1024
 n_feats: 80
 sample_rate: 22050

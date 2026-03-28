@@ -1,8 +1,4 @@
 from typing import Any, Dict, List, Optional, Tuple
-
-import os
-os.environ['PHONEMIZER_ESPEAK_LIBRARY'] = '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so'
-
 import hydra
 import torch
 import lightning as L
@@ -81,6 +77,44 @@ def train(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
 
     if cfg.get("train"):
         log.info("Starting training!")
+        if cfg.get("ckpt_path"):
+            log.info(f"💉 Injecting pre-trained VCTK weights from: {cfg.ckpt_path}")
+            # Load the checkpoint file into memory
+            checkpoint = torch.load(cfg.ckpt_path, map_location="cpu", weights_only=False)
+            state_dict = checkpoint["state_dict"]
+            model_dict = model.state_dict()
+
+            new_state_dict = {}
+            for k, v in state_dict.items():
+                if k in model_dict:
+                    # If shapes match perfectly, copy them directly
+                    if v.shape == model_dict[k].shape:
+                        new_state_dict[k] = v
+                        
+                    # If the Vocab size changed (178 -> 198)
+                    elif "encoder.emb.weight" in k:
+                        log.info(f"✂️ Grafting Vocab: {v.shape} -> {model_dict[k].shape}")
+                        new_w = model_dict[k].clone() # Keep new random weights
+                        min_vocab = min(v.shape[0], model_dict[k].shape[0])
+                        new_w[:min_vocab, :] = v[:min_vocab, :] # Inject old weights
+                        new_state_dict[k] = new_w
+                        
+                    # If the Speaker size changed
+                    elif "spk_emb.weight" in k:
+                        log.info(f"✂️ Grafting Speaker Table: {v.shape} -> {model_dict[k].shape}")
+                        new_w = model_dict[k].clone()
+                        min_spk = min(v.shape[0], model_dict[k].shape[0])
+                        new_w[:min_spk, :] = v[:min_spk, :]
+                        new_state_dict[k] = new_w
+                        
+                    else:
+                        log.info(f"⚠️ Skipping {k} due to unhandled size mismatch: {v.shape} vs {model_dict[k].shape}")
+
+            # strict=False handles any completely missing layers
+            model.load_state_dict(new_state_dict, strict=False)
+            log.info("✅ Pre-trained weights successfully loaded!")
+            
+        log.info("🚀 Launching Trainer.fit from Epoch 0...")
         trainer.fit(model=model, datamodule=datamodule, ckpt_path=None, weights_only=False)
 
     train_metrics = trainer.callback_metrics
