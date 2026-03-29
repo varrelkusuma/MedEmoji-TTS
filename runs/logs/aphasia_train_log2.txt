@@ -1,8 +1,8 @@
-🚀 Job started at Sat 28 Mar 23:56:31 GMT 2026
+🚀 Job started at Sat 28 Mar 21:48:44 GMT 2026
 📂 Current directory: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts
 🐍 Using python: /rds/general/user/ak8224/home/miniforge3/envs/emojivoice/bin/python
-[2026-03-28 23:58:14,142][matcha.utils.utils][INFO] - Enforcing tags! <cfg.extras.enforce_tags=True>
-[2026-03-28 23:58:14,148][matcha.utils.utils][INFO] - Printing config tree with Rich! <cfg.extras.print_config=True>
+[2026-03-28 21:50:59,133][matcha.utils.utils][INFO] - Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-03-28 21:50:59,138][matcha.utils.utils][INFO] - Printing config tree with Rich! <cfg.extras.print_config=True>
 CONFIG
 ├── data
 │   └── _target_: matcha.data.text_mel_datamodule.TextMelDataModule             
@@ -116,7 +116,7 @@ CONFIG
 ├── trainer
 │   └── _target_: lightning.pytorch.trainer.Trainer                             
 │       default_root_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/
-│       max_epochs: 500                                                         
+│       max_epochs: 50                                                          
 │       accelerator: gpu                                                        
 │       devices: 1                                                              
 │       precision: 16-mixed                                                     
@@ -152,30 +152,30 @@ CONFIG
 └── seed
     └── 1234                                                                    
 Seed set to 1234
-[2026-03-28 23:58:14,400][__main__][INFO] - Instantiating datamodule <matcha.data.text_mel_datamodule.TextMelDataModule>
-[2026-03-28 23:58:26,897][__main__][INFO] - Instantiating model <matcha.models.matcha_tts.MatchaTTS>
+[2026-03-28 21:50:59,505][__main__][INFO] - Instantiating datamodule <matcha.data.text_mel_datamodule.TextMelDataModule>
+[2026-03-28 21:51:16,852][__main__][INFO] - Instantiating model <matcha.models.matcha_tts.MatchaTTS>
 /rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/diffusers/models/lora.py:391: FutureWarning: `LoRACompatibleLinear` is deprecated and will be removed in version 1.0.0. Use of `LoRACompatibleLinear` is deprecated. Please switch to PEFT backend by installing PEFT: `pip install peft`.
   deprecate("LoRACompatibleLinear", "1.0.0", deprecation_message)
-[2026-03-28 23:58:32,327][__main__][INFO] - Instantiating callbacks...
-[2026-03-28 23:58:32,327][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
-[2026-03-28 23:58:32,347][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
-[2026-03-28 23:58:32,347][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichProgressBar>
-[2026-03-28 23:58:32,347][__main__][INFO] - Instantiating loggers...
-[2026-03-28 23:58:32,348][matcha.utils.instantiators][INFO] - Instantiating logger <lightning.pytorch.loggers.tensorboard.TensorBoardLogger>
-[2026-03-28 23:58:32,351][__main__][INFO] - Instantiating trainer <lightning.pytorch.trainer.Trainer>
+[2026-03-28 21:51:23,763][__main__][INFO] - Instantiating callbacks...
+[2026-03-28 21:51:23,763][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-03-28 21:51:23,796][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-03-28 21:51:23,796][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichProgressBar>
+[2026-03-28 21:51:23,797][__main__][INFO] - Instantiating loggers...
+[2026-03-28 21:51:23,797][matcha.utils.instantiators][INFO] - Instantiating logger <lightning.pytorch.loggers.tensorboard.TensorBoardLogger>
+[2026-03-28 21:51:23,799][__main__][INFO] - Instantiating trainer <lightning.pytorch.trainer.Trainer>
 Using 16bit Automatic Mixed Precision (AMP)
 Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
 GPU available: True (cuda), used: True
 TPU available: False, using: 0 TPU cores
 💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
-[2026-03-28 23:58:32,641][__main__][INFO] - Logging hyperparameters!
-[2026-03-28 23:58:34,030][__main__][INFO] - Starting training!
-[2026-03-28 23:58:34,031][__main__][INFO] - 💉 Injecting pre-trained VCTK weights from: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha_vctk.ckpt
-[2026-03-28 23:58:35,917][__main__][INFO] - ✂️ Grafting VCTK Speaker p227 (Index 2) to Speaker 0
-[2026-03-28 23:58:35,917][__main__][INFO] - ✂️ Grafting Vocab: torch.Size([178, 192]) -> torch.Size([198, 192])
-[2026-03-28 23:58:35,933][__main__][INFO] - ✅ Pre-trained weights successfully loaded!
-[2026-03-28 23:58:35,933][__main__][INFO] - 🚀 Launching Trainer.fit from Epoch 0...
-LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-9a592f78-d524-b514-54bf-4d9d78f4d46c]
+[2026-03-28 21:51:24,232][__main__][INFO] - Logging hyperparameters!
+[2026-03-28 21:51:26,123][__main__][INFO] - Starting training!
+[2026-03-28 21:51:26,124][__main__][INFO] - 💉 Injecting pre-trained VCTK weights from: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha_vctk.ckpt
+[2026-03-28 21:51:28,304][__main__][INFO] - ✂️ Grafting VCTK Speaker p227 (Index 2) to Speaker 0
+[2026-03-28 21:51:28,304][__main__][INFO] - ✂️ Grafting Vocab: torch.Size([178, 192]) -> torch.Size([198, 192])
+[2026-03-28 21:51:28,320][__main__][INFO] - ✅ Pre-trained weights successfully loaded!
+[2026-03-28 21:51:28,320][__main__][INFO] - 🚀 Launching Trainer.fit from Epoch 0...
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-24582bc9-0d17-056d-bbbd-0505bc64b178]
 /rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/utilities/model_summary/model_summary.py:242: Precision 16-mixed is not supported by the model summary.  Estimated model size in MB will not be accurate. Using 32 bits instead.
 ┏━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
 ┃    ┃ Name                              ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
@@ -219,28 +219,28 @@ Total estimated model params size (MB): 83
 Modules in train mode: 334                                                      
 Modules in eval mode: 0                                                         
 Total FLOPs: 0                                                                  
-`Trainer.fit` stopped: `max_epochs=500` reached.
-Epoch 499/499 ━━━━━━━━━━━━━━━━━ 6/6 0:00:03 • 0:00:00 3.06it/s v_num: 0.000     
-                                                               step: 2999.000   
-                                                               loss/train_step: 
-                                                               4.561            
-                                                               loss/val_step:   
-                                                               5.448            
-                                                               loss/val_epoch:  
-                                                               5.448            
-                                                               loss/train_epoch:
-                                                               3.471            
-[2026-03-29 00:48:27,462][__main__][INFO] - Starting testing!
+`Trainer.fit` stopped: `max_epochs=50` reached.
+Epoch 49/49 ━━━━━━━━━━━━━━━━━━ 6/6 0:00:03 • 0:00:00 3.11it/s v_num: 0.000 step:
+                                                              299.000           
+                                                              loss/train_step:  
+                                                              4.670             
+                                                              loss/val_step:    
+                                                              3.692             
+                                                              loss/val_epoch:   
+                                                              3.692             
+                                                              loss/train_epoch: 
+                                                              4.352             
+[2026-03-28 21:56:22,598][__main__][INFO] - Starting testing!
 🎉 Training complete! Skipping formal test_step as it is not defined.
-[2026-03-29 00:48:27,462][__main__][INFO] - Best ckpt path: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/aphasia/checkpoints/checkpoint_epoch=499.ckpt
-[2026-03-29 00:48:27,466][matcha.utils.utils][INFO] - Output dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/aphasia
-[2026-03-29 00:48:27,481][matcha.utils.utils][INFO] - Metric name is None! Skipping metric value retrieval...
+[2026-03-28 21:56:22,598][__main__][INFO] - Best ckpt path: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/aphasia/checkpoints/checkpoint_epoch=049.ckpt
+[2026-03-28 21:56:22,602][matcha.utils.utils][INFO] - Output dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/aphasia
+[2026-03-28 21:56:22,614][matcha.utils.utils][INFO] - Metric name is None! Skipping metric value retrieval...
 
 ====================================
-CPU Time used: 01:30:04
-CPU Percent: 190%
-Memory usage: 25165824kb
-Approx Power usage: 0.018
-Walltime usage: 00:52:03
+CPU Time used: 00:08:47
+CPU Percent: 187%
+Memory usage: 10470608kb
+Approx Power usage: 0.0016
+Walltime usage: 00:07:46
 
 ====================================

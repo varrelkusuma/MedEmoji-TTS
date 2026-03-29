@@ -17,20 +17,20 @@ trainer:
   devices: 1
 
 model:
-  n_spks: 109
+  n_spks: 2
   n_vocab: 198
   spk_emb_dim: 64
   
   encoder:
     encoder_params:
-      hidden_channels: 192
+      hidden_channels: 256
       n_channels: 192
       n_feats: 80
       n_layers: 6
       n_heads: 2
       prenet: true
     n_feats: 80
-    n_spks: 3
+    n_spks: 2
 
   decoder:
     dropout: 0.05

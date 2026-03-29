@@ -95,16 +95,21 @@ def train(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
                     elif "encoder.emb.weight" in k:
                         log.info(f"✂️ Grafting Vocab: {v.shape} -> {model_dict[k].shape}")
                         new_w = model_dict[k].clone() # Keep new random weights
-                        min_vocab = min(v.shape[0], model_dict[k].shape[0])
-                        new_w[:min_vocab, :] = v[:min_vocab, :] # Inject old weights
+
+                        min_v = min(v.shape[0], model_dict[k].shape[0])
+                        min_d = min(v.shape[1], model_dict[k].shape[1])
+
+                        new_w[:min_v, :min_d] = v[:min_v, :min_d] # Inject old weights
                         new_state_dict[k] = new_w
                         
                     # If the Speaker size changed
                     elif "spk_emb.weight" in k:
-                        log.info(f"✂️ Grafting Speaker Table: {v.shape} -> {model_dict[k].shape}")
+                        log.info(f"✂️ Grafting VCTK Speaker p227 (Index 2) to Speaker 0")
                         new_w = model_dict[k].clone()
-                        min_spk = min(v.shape[0], model_dict[k].shape[0])
-                        new_w[:min_spk, :] = v[:min_spk, :]
+
+                        ideal_vctk_speaker_id = 2
+                        min_d = min(v.shape[1], model_dict[k].shape[1])
+                        new_w[0, :min_d] = v[ideal_vctk_speaker_id, :min_d]
                         new_state_dict[k] = new_w
                         
                     else:

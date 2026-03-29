@@ -32,7 +32,7 @@ python matcha/train.py \
     task_name="finetune" \
     run_name="aphasia" \
     hydra.run.dir=$PROJECT_ROOT/logs/aphasia \
-    trainer.max_epochs=1000 \
+    trainer.max_epochs=500 \
     +trainer.log_every_n_steps=1 \
-    callbacks.model_checkpoint.every_n_epochs=10 \
+    callbacks.model_checkpoint.every_n_epochs=50 \
     ckpt_path=/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha_vctk.ckpt
