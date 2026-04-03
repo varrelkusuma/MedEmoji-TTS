@@ -1,0 +1,4 @@
+/rds/general/user/ak8224/home/emoji_project/data/ASD/final/preprocessed/patient2_0043.wav|2|Music.
+/rds/general/user/ak8224/home/emoji_project/data/ASD/final/preprocessed/patient3_0001.wav|2|This is George.
+/rds/general/user/ak8224/home/emoji_project/data/ASD/final/preprocessed/patient2_0078.wav|2|I bump this hat.
+/rds/general/user/ak8224/home/emoji_project/data/ASD/final/preprocessed/patient1_0038.wav|2|I'm asking you.

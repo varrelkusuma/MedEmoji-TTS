@@ -106,10 +106,15 @@ def train(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
                     elif "spk_emb.weight" in k:
                         log.info(f"✂️ Grafting VCTK Speaker p227 (Index 2) to Speaker 0")
                         new_w = model_dict[k].clone()
-
-                        ideal_vctk_speaker_id = 2
                         min_d = min(v.shape[1], model_dict[k].shape[1])
-                        new_w[0, :min_d] = v[ideal_vctk_speaker_id, :min_d]
+
+                        vctk_aphasia_match = 2
+                        vctk_dementia_match = 36
+                        vctk_asd_match = 46
+
+                        new_w[0, :min_d] = v[vctk_aphasia_match, :min_d]
+                        new_w[1, :min_d] = v[vctk_dementia_match, :min_d]
+                        new_w[2, :min_d] = v[vctk_asd_match, :min_d]
                         new_state_dict[k] = new_w
                         
                     else:

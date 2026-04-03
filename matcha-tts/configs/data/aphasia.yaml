@@ -1,5 +1,5 @@
 _target_: matcha.data.text_mel_datamodule.TextMelDataModule
-name: multi_emotion_data
+name: aphasia_data
 train_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/aphasia/train.txt
 valid_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/aphasia/val.txt
 batch_size: 16

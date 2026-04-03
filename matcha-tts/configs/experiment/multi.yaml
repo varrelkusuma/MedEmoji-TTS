@@ -1,0 +1,36 @@
+# @package _global_
+
+defaults:
+  - override /data: multi
+  - override /model: matcha
+  - override /callbacks: default
+  - override /trainer: default
+
+task_name: "finetune"
+run_name: "multi"
+
+seed: 1234
+
+trainer:
+  max_epochs: 1000
+  gradient_clip_val: 1.0
+  devices: 1
+
+model:
+  n_spks: 3
+  n_vocab: 198
+  spk_emb_dim: 64
+  
+  encoder:
+    encoder_params:
+      hidden_channels: 256
+      n_channels: 192
+      n_feats: 80
+      n_layers: 6
+      n_heads: 2
+      prenet: true
+    n_feats: 80
+    n_spks: 3
+
+  decoder:
+    dropout: 0.05
