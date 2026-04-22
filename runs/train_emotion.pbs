@@ -1,8 +1,8 @@
 #PBS -l select=1:ncpus=4:mem=24gb:ngpus=1:gpu_type=RTX6000
 #PBS -l walltime=24:00:00
-#PBS -N multi_train
+#PBS -N emotion_train
 #PBS -j oe
-#PBS -o /rds/general/user/ak8224/home/MedEmoji-TTS/runs/logs/multi_train_log.txt
+#PBS -o /rds/general/user/ak8224/home/MedEmoji-TTS/runs/logs/emotion_train_log.txt
 
 # 1. Setup Paths
 PROJECT_ROOT=/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts
@@ -26,11 +26,11 @@ export LD_LIBRARY_PATH=/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/
 export PATH=/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/bin:$PATH
 
 # 4. Launch Training
-python matcha/train.py \
-    experiment=multi \
+python matcha/train_emotion.py \
+    experiment=emotion \
     task_name="finetune" \
-    run_name="multi" \
-    hydra.run.dir=$PROJECT_ROOT/logs/multi \
+    run_name="emotion" \
+    hydra.run.dir=$PROJECT_ROOT/logs/emotion \
     trainer.max_epochs=1000 \
     +trainer.log_every_n_steps=1 \
     callbacks.model_checkpoint.every_n_epochs=100 \

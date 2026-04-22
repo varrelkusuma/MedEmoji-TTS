@@ -1,13 +1,13 @@
 # @package _global_
 
 defaults:
-  - override /data: multi
+  - override /data: emotion
   - override /model: matcha
   - override /callbacks: default
   - override /trainer: default
 
 task_name: "finetune"
-run_name: "multi"
+run_name: "emotion"
 
 seed: 1234
 
@@ -17,7 +17,7 @@ trainer:
   devices: 1
 
 model:
-  n_spks: 3
+  n_spks: 10
   n_vocab: 198
   spk_emb_dim: 64
   
@@ -31,7 +31,7 @@ model:
       n_heads: 2
       prenet: true
     n_feats: 80
-    n_spks: 3
+    n_spks: 10
 
   decoder:
     dropout: 0.05

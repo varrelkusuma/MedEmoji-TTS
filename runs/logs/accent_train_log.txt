@@ -1,0 +1,738 @@
+🚀 Job started at Fri 10 Apr 02:03:45 BST 2026
+📂 Current directory: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts
+🐍 Using python: /rds/general/user/ak8224/home/miniforge3/envs/emojivoice/bin/python
+[2026-04-10 02:05:25,211][matcha.utils.utils][INFO] - Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-04-10 02:05:25,216][matcha.utils.utils][INFO] - Printing config tree with Rich! <cfg.extras.print_config=True>
+CONFIG
+├── data
+│   └── _target_: matcha.data.text_mel_datamodule.TextMelDataModule             
+│       name: accent                                                            
+│       train_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/vector/a
+│       valid_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/vector/a
+│       batch_size: 32                                                          
+│       num_workers: 4                                                          
+│       pin_memory: true                                                        
+│       cleaners:                                                               
+│       - english_cleaners2                                                     
+│       add_blank: true                                                         
+│       n_spks: 14                                                              
+│       n_fft: 1024                                                             
+│       n_feats: 80                                                             
+│       sample_rate: 22050                                                      
+│       hop_length: 256                                                         
+│       win_length: 1024                                                        
+│       f_min: 0                                                                
+│       f_max: 8000                                                             
+│       data_statistics:                                                        
+│         mel_mean: -0.669601                                                   
+│         mel_std: 1.644132                                                     
+│       seed: 1234                                                              
+│       load_durations: false                                                   
+│                                                                               
+├── model
+│   └── _target_: matcha.models.matcha_tts.MatchaTTS                            
+│       n_vocab: 198                                                            
+│       n_spks: 14                                                              
+│       spk_emb_dim: 64                                                         
+│       n_feats: 80                                                             
+│       data_statistics:                                                        
+│         mel_mean: -0.669601                                                   
+│         mel_std: 1.644132                                                     
+│       out_size: null                                                          
+│       prior_loss: true                                                        
+│       use_precomputed_durations: false                                        
+│       encoder:                                                                
+│         encoder_type: RoPE Encoder                                            
+│         encoder_params:                                                       
+│           n_feats: 80                                                         
+│           n_channels: 192                                                     
+│           filter_channels: 768                                                
+│           filter_channels_dp: 256                                             
+│           n_heads: 2                                                          
+│           n_layers: 6                                                         
+│           kernel_size: 3                                                      
+│           p_dropout: 0.1                                                      
+│           spk_emb_dim: 64                                                     
+│           n_spks: 1                                                           
+│           prenet: true                                                        
+│           hidden_channels: 256                                                
+│         duration_predictor_params:                                            
+│           filter_channels_dp: 256                                             
+│           kernel_size: 3                                                      
+│           p_dropout: 0.1                                                      
+│         n_feats: 80                                                           
+│         n_spks: 14                                                            
+│       decoder:                                                                
+│         channels:                                                             
+│         - 256                                                                 
+│         - 256                                                                 
+│         dropout: 0.05                                                         
+│         attention_head_dim: 64                                                
+│         n_blocks: 1                                                           
+│         num_mid_blocks: 2                                                     
+│         num_heads: 2                                                          
+│         act_fn: snakebeta                                                     
+│       cfm:                                                                    
+│         name: CFM                                                             
+│         solver: euler                                                         
+│         sigma_min: 0.0001                                                     
+│       optimizer:                                                              
+│         _target_: torch.optim.Adam                                            
+│         _partial_: true                                                       
+│         lr: 5.0e-05                                                           
+│         weight_decay: 0.0                                                     
+│                                                                               
+├── callbacks
+│   └── model_checkpoint:                                                       
+│         _target_: lightning.pytorch.callbacks.ModelCheckpoint                 
+│         dirpath: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/ac
+│         filename: checkpoint_{epoch:03d}                                      
+│         monitor: epoch                                                        
+│         verbose: false                                                        
+│         save_last: true                                                       
+│         save_top_k: 10                                                        
+│         mode: max                                                             
+│         auto_insert_metric_name: true                                         
+│         save_weights_only: false                                              
+│         every_n_train_steps: null                                             
+│         train_time_interval: null                                             
+│         every_n_epochs: 100                                                   
+│         save_on_train_epoch_end: null                                         
+│       model_summary:                                                          
+│         _target_: lightning.pytorch.callbacks.RichModelSummary                
+│         max_depth: 3                                                          
+│       rich_progress_bar:                                                      
+│         _target_: lightning.pytorch.callbacks.RichProgressBar                 
+│                                                                               
+├── logger
+│   └── tensorboard:                                                            
+│         _target_: lightning.pytorch.loggers.tensorboard.TensorBoardLogger     
+│         save_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/a
+│         name: null                                                            
+│         log_graph: false                                                      
+│         default_hp_metric: true                                               
+│         prefix: ''                                                            
+│                                                                               
+├── trainer
+│   └── _target_: lightning.pytorch.trainer.Trainer                             
+│       default_root_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/
+│       max_epochs: 1000                                                        
+│       accelerator: gpu                                                        
+│       devices: 1                                                              
+│       precision: 16-mixed                                                     
+│       check_val_every_n_epoch: 1                                              
+│       deterministic: false                                                    
+│       gradient_clip_val: 1.0                                                  
+│       log_every_n_steps: 1                                                    
+│                                                                               
+├── paths
+│   └── root_dir: /rds/general/user/ak8224/home/MedEmoji-TTS                    
+│       data_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/data/              
+│       log_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/logs/               
+│       output_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/a
+│       work_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts         
+│                                                                               
+├── extras
+│   └── ignore_warnings: false                                                  
+│       enforce_tags: true                                                      
+│       print_config: true                                                      
+│                                                                               
+├── task_name
+│   └── finetune                                                                
+├── run_name
+│   └── accent                                                                  
+├── tags
+│   └── ['dev']                                                                 
+├── train
+│   └── True                                                                    
+├── test
+│   └── True                                                                    
+├── ckpt_path
+│   └── /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha
+└── seed
+    └── 1234                                                                    
+Seed set to 1234
+[2026-04-10 02:05:25,509][__main__][INFO] - Instantiating datamodule <matcha.data.text_mel_datamodule.TextMelDataModule>
+[2026-04-10 02:05:37,399][__main__][INFO] - Instantiating model <matcha.models.matcha_tts.MatchaTTS>
+/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/diffusers/models/lora.py:391: FutureWarning: `LoRACompatibleLinear` is deprecated and will be removed in version 1.0.0. Use of `LoRACompatibleLinear` is deprecated. Please switch to PEFT backend by installing PEFT: `pip install peft`.
+  deprecate("LoRACompatibleLinear", "1.0.0", deprecation_message)
+[2026-04-10 02:05:42,477][__main__][INFO] - Instantiating callbacks...
+[2026-04-10 02:05:42,477][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-04-10 02:05:42,487][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-04-10 02:05:42,488][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichProgressBar>
+[2026-04-10 02:05:42,488][__main__][INFO] - Instantiating loggers...
+[2026-04-10 02:05:42,488][matcha.utils.instantiators][INFO] - Instantiating logger <lightning.pytorch.loggers.tensorboard.TensorBoardLogger>
+[2026-04-10 02:05:42,491][__main__][INFO] - Instantiating trainer <lightning.pytorch.trainer.Trainer>
+Using 16bit Automatic Mixed Precision (AMP)
+Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+[2026-04-10 02:05:42,593][__main__][INFO] - Logging hyperparameters!
+[2026-04-10 02:05:44,173][__main__][INFO] - Starting training!
+[2026-04-10 02:05:44,174][__main__][INFO] - 💉 Injecting pre-trained VCTK weights from: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha_vctk.ckpt
+[2026-04-10 02:05:46,726][__main__][INFO] - ✂️ Grafting VCTK Anchors (0 Female, 2 Male) to 14 Accent Speakers
+[2026-04-10 02:05:46,727][__main__][INFO] - ✂️ Grafting Vocab: torch.Size([178, 192]) -> torch.Size([198, 192])
+[2026-04-10 02:05:46,743][__main__][INFO] - ✅ Pre-trained weights successfully loaded!
+[2026-04-10 02:05:46,743][__main__][INFO] - 🚀 Launching Trainer.fit from Epoch 0...
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-32810294-4bc2-0e5e-d7ec-4bf0746059db]
+/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/utilities/model_summary/model_summary.py:242: Precision 16-mixed is not supported by the model summary.  Estimated model size in MB will not be accurate. Using 32 bits instead.
+┏━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃    ┃ Name                              ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0  │ spk_emb                           │ Embedding  │    896 │ train │     0 │
+│ 1  │ encoder                           │ TextEncod… │  9.7 M │ train │     0 │
+│ 2  │ encoder.emb                       │ Embedding  │ 38.0 K │ train │     0 │
+│ 3  │ encoder.prenet                    │ ConvReluN… │  591 K │ train │     0 │
+│ 4  │ encoder.prenet.conv_layers        │ ModuleList │  553 K │ train │     0 │
+│ 5  │ encoder.prenet.norm_layers        │ ModuleList │  1.2 K │ train │     0 │
+│ 6  │ encoder.prenet.relu_drop          │ Sequential │      0 │ train │     0 │
+│ 7  │ encoder.prenet.proj               │ Conv1d     │ 37.1 K │ train │     0 │
+│ 8  │ encoder.encoder                   │ Encoder    │  8.7 M │ train │     0 │
+│ 9  │ encoder.encoder.drop              │ Dropout    │      0 │ train │     0 │
+│ 10 │ encoder.encoder.attn_layers       │ ModuleList │  1.6 M │ train │     0 │
+│ 11 │ encoder.encoder.norm_layers_1     │ ModuleList │  3.1 K │ train │     0 │
+│ 12 │ encoder.encoder.ffn_layers        │ ModuleList │  7.1 M │ train │     0 │
+│ 13 │ encoder.encoder.norm_layers_2     │ ModuleList │  3.1 K │ train │     0 │
+│ 14 │ encoder.proj_m                    │ Conv1d     │ 20.6 K │ train │     0 │
+│ 15 │ encoder.proj_w                    │ DurationP… │  395 K │ train │     0 │
+│ 16 │ encoder.proj_w.drop               │ Dropout    │      0 │ train │     0 │
+│ 17 │ encoder.proj_w.conv_1             │ Conv1d     │  196 K │ train │     0 │
+│ 18 │ encoder.proj_w.norm_1             │ LayerNorm  │    512 │ train │     0 │
+│ 19 │ encoder.proj_w.conv_2             │ Conv1d     │  196 K │ train │     0 │
+│ 20 │ encoder.proj_w.norm_2             │ LayerNorm  │    512 │ train │     0 │
+│ 21 │ encoder.proj_w.proj               │ Conv1d     │    257 │ train │     0 │
+│ 22 │ decoder                           │ CFM        │ 11.1 M │ train │     0 │
+│ 23 │ decoder.estimator                 │ Decoder    │ 11.1 M │ train │     0 │
+│ 24 │ decoder.estimator.time_embeddings │ Sinusoida… │      0 │ train │     0 │
+│ 25 │ decoder.estimator.time_mlp        │ TimestepE… │  1.3 M │ train │     0 │
+│ 26 │ decoder.estimator.down_blocks     │ ModuleList │  3.1 M │ train │     0 │
+│ 27 │ decoder.estimator.mid_blocks      │ ModuleList │  2.8 M │ train │     0 │
+│ 28 │ decoder.estimator.up_blocks       │ ModuleList │  3.7 M │ train │     0 │
+│ 29 │ decoder.estimator.final_block     │ Block1D    │  197 K │ train │     0 │
+│ 30 │ decoder.estimator.final_proj      │ Conv1d     │ 20.6 K │ train │     0 │
+└────┴───────────────────────────────────┴────────────┴────────┴───────┴───────┘
+Trainable params: 20.9 M                                                        
+Non-trainable params: 0                                                         
+Total params: 20.9 M                                                            
+Total estimated model params size (MB): 83                                      
+Modules in train mode: 334                                                      
+Modules in eval mode: 0                                                         
+Total FLOPs: 0                                                                  
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp1s4is3rh/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp43gg7q6w/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp8vevztjq/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp39pro3or/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpxp6tj8p8/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpe6u__l8t/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpmxb2hij5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvf3przdm/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpki97h3dc/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpkb17o18o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpww66xbde/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpfxs6bkn6/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpu9khdd1a/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpb913fjs7/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpn78par2n/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpb1lg1e0e/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp24nmanw5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0mnkfams/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpb7vywg6_/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpkzii1pb0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdl_rf44q/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpcbkklbz9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpi8vjax33/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp892ybkd_/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpowk5tyg2/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpxh4nvaq3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpzgp7jrg4/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpu_szld08/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpzts6bqvy/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpgy7pbwk8/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp9_omvb_1/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpr618n3u2/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpv1yx1w_i/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpfm1rr2jh/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp77wf7h6v/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpd0esz7q0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp_cflwyzq'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpg13ru0nh/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvgh7jr79/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp7ozx396j/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp8pqnmk4r/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpuygdkr16/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpad5xnnxp'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpjr0ylruf/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmptkewtu4y/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpn0tnpod4/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpwbuey0me/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0nrh685p/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp46saws3d/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpj59pe7tz/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpql89rp5p/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6id1f2bx/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpz2_5vykt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpr1mzmbob/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpoxbgspmt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpsnw1512j/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpqfyla6wl/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvygcfpph/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpn4g86k3g/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpe2g0dsg9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp37tnrcj7/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpq0jbxnmt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpxgbhbwc0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpcbrwwn74/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmppmkce4b2/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp7ymiyqt3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0eo2yq9c/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp85nqs0mp/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp9wijorqa/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpm0yiosc4/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpy92nrvv_/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp14l2b9w2'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpxfndbk_v'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpgiwr5kl5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpjypjonit/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp85l1gi47/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpzqwg7uwt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmppftc4g_6/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpsuc63ar3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpwy9ydkf7/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpj1t4h0tp/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpmtt4ulmz/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp_fb0m_5v/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdd34uuj5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp194unnc7'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpo_e8v_d7'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpbxvie6nf/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpqwp1ezfu/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpu4zo2j25/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpkd4rkp_g/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpwtq70bkt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp_3arrt2q/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6enbpllm/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpnhsw9v71/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpqm4jk83x/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpaswyxg3i/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp88akk28o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp4v675sge/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp1aovw50w/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmptwhxiwor/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmphq2g0ba3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpq83rx68r/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmph18rgu8j/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvzj4vj9s/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0cpfinkn/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpd23lx_wi'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpn94jet5o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmptw97w_uk/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdg28wj7z/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpsac8p25s/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpzr070ooe/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0v6mljuf/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmprzlt9qek/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp52mnfvrw/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmprl6gdlxd'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmplwow1sne/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpq6xr961o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpj41d83q2/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpjmtrbq6p/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvyb5uq1o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp165dvwe9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmptlkz22ep/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpqw9zjcqz/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp2zokc6ap/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpqzqe8y5a/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpt9_k2rtf/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp7lkoq38d/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmptmmdczx5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp74yxpa4c/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpq39ey7mu/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpqs4nfchc/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp4phn75uj/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpmwb3_u77/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6ikrqkkt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmprbbse4va/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpk2t6sj2o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpv54hge1_/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp5s1fpi8e'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpw77jlzdq/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpctahvyh4/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpe6fopcom/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp_f_2n986/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpmuuso_xs/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpg45czvl3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmplymfzzeo/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmptb4mylj0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpewebuuuf/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpd85b46sv'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpu9dp9p20/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpa1ank9j3'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp_b5ij3tw/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpgy8_ac6o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpr_oaugqi/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp20ywt61t'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpjeh32at4/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpg7dcdb62/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpwn0mooi3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmps0vevaim/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp5iyeduvj'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpqdaqz1n8/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp2wy_94qi/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpk4ebhaww/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpkq5doppd/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp8bnobnnd/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpux__qca3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpyzuh16dx/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdd00ryj9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpsngntzy3/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpk2vn2okk/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpw1oj9l5l/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmptm2sdpxh/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpt167c42i/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp70k1mfxv/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp2j4hib08/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpslwoim85/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpik0uw1gq/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmplkz4qclg/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp_w1sok17/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmphshzynr6/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp87kt36jn/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpo2m3a7xk/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpwybjst_a/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0wl3wcro/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpovxfdt1y/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp39hrpr7i/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdxj2r16f/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpn475agzw/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpu1wmizbf/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpeh6ptcw6/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpjwn1ghar/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpcil6iobg/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRI⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp22r33axb/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpydukyet9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvnkcqtnq/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp46xhsnv0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpki1ox_ji/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0xabu03f/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp4vexnal_/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp4uo94ohb'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmporvipoik'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmptsj_y9oo'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpu1g8ce7e'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpfilui7s4'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpvizrxafk'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp5m1kf31z'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp13druahn'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmptesxb3l8'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmptv0r4fvt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp83ccbc5e/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp4055z85c/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6z1g88fg/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpeqw_p2dy/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpbtpecd3g/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpxbqmbu4f/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp84mec78k/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpbaalwj5p/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpk30rtmd6/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpv1qdesfd/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp9_y3kz3x/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpy_rm_b4w/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpeemmpm4k/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpcwarz5qn/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp62j998yg/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpa6a1dvow/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpyk7oqv52/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpqrrmf5ho/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdx0nc7_5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpsqhfl3e9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpho77hdcb/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpe2ffnhx_/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvek6z8gw/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpv24f45oa/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6j3vsm91/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpzzudsdzw/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpf87vtozx'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpb1vh27w4'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpgod13dmf'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp8udn2sp0'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpwh979ou3'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp2sfrw92q'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpgfi6lmn9'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpj4mt3boq'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmplpl4alps'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp5j038vd0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpya0q45p5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpxmsao6t9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpdmi5tmwz'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpnjwuhq44/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpc9orvzwd/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpwc3ona0a/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp474wxum0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp11ww6c6w/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvgnpvb2l/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdicjtafp/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpri17s8jr/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpbmysfx29/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpjp_gj96b/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpalnqk4ba/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp_9qfiyzw/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp37z0t9yn/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpbe32enh1/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp1pjz_ghe/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpigarmoax/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpd58dz096/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpq3d0ezm9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpln6vomdi/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6mjnr_mu/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpcylj6qzn'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp33guloy1/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp2nmok3fc'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp54y0cikz/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6jks4hke/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp25zwotgy/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp5xhh7qoh/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpl7hedaol/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpug36n0pw/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp7007lnrc/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp1pvzhlyv'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpsaqhesnt/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp4uw6s7g5/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpvmgc2hh0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpts7_xw1e/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp9wwev4un/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpq1g603n9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpv5tkqkbs/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdap1tz7j/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp1wtx7q3g/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpo03pyf15'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmplxiuxwp8'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpga1of7qg'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmp_19qliwt'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpbtu32vae/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpl_yemdaj/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp11xozuck/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp5liv9ov8/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpv6q00u1o/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpou1xs3u9/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpbs12ag1d/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpmsczh6u0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp89k8tcfz/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpo_ebvza4/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp6uzc0ma1/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmp0dhwi8k0/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmphk5k63kd/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpdmxrwtkj/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpjh9atdbk/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/var/tmp/pbs.2150668.pbs-7/tmpmzb8t7wr'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpnxshi31c/libespeak-ng.so.1.52.0.1'
+⚠️ Phonemization CRITICAL FAILURE: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpq_583aka/libespeak-ng.so.1.52.0.1'
+Epoch 516/999 ━━━━━━━━━━━━╸    29/36 0:00:20 •        1.59it/s v_num: 0.000     
+                                     0:00:05                   step: 18604.000  
+                                                               loss/train_step: 
+                                                               2.884            
+                                                               loss/val_step:   
+                                                               2.772            
+                                                               loss/val_epoch:  
+                                                               2.998            
+                                                               loss/train_epoch:
+                                                               2.345            
+[2026-04-10 07:07:59,739][matcha.utils.utils][ERROR] - 
+Traceback (most recent call last):
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/utils/utils.py", line 77, in wrap
+    metric_dict, object_dict = task_func(cfg=cfg)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/train_accent.py", line 139, in train
+    trainer.fit(model=model, datamodule=datamodule, ckpt_path=None, weights_only=False)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 584, in fit
+    call._call_and_handle_interrupt(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 49, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 630, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path, weights_only=weights_only)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1079, in _run
+    results = self._run_stage()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1123, in _run_stage
+    self.fit_loop.run()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 217, in run
+    self.advance()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 465, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 153, in run
+    self.advance(data_fetcher)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 311, in advance
+    batch, _, __ = next(data_fetcher)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 134, in __next__
+    batch = super().__next__()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 61, in __next__
+    batch = next(self.iterator)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 341, in __next__
+    out = next(self._iterator)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 78, in __next__
+    out[i] = next(self.iterators[i])
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 733, in __next__
+    data = self._next_data()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1488, in _next_data
+    return self._process_data(data, worker_id)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1550, in _process_data
+    data.reraise()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/_utils.py", line 750, in reraise
+    raise exception
+OSError: Caught OSError in DataLoader worker process 1.
+Original Traceback (most recent call last):
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/cleaners.py", line 97, in english_cleaners2
+    phonemes = phonemize(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/phonemize.py", line 206, in phonemize
+    phonemizer = BACKENDS[backend](
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/espeak.py", line 45, in __init__
+    super().__init__(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/base.py", line 39, in __init__
+    super().__init__(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/base.py", line 76, in __init__
+    if not self.is_available():
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/base.py", line 87, in is_available
+    EspeakWrapper()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/wrapper.py", line 60, in __init__
+    self._espeak = EspeakAPI(self.library())
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/api.py", line 80, in __init__
+    shutil.copy(library_path, espeak_copy, follow_symlinks=False)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 267, in copyfile
+    _fastcopy_sendfile(fsrc, fdst)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 156, in _fastcopy_sendfile
+    raise err from None
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 142, in _fastcopy_sendfile
+    sent = os.sendfile(outfd, infd, offset, blocksize)
+OSError: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpj9ppm3n3/libespeak-ng.so.1.52.0.1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/data/text_mel_datamodule.py", line 224, in __getitem__
+    datapoint = self.get_datapoint(self.filepaths_and_text[index])
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/data/text_mel_datamodule.py", line 175, in get_datapoint
+    text, cleaned_text = self.get_text(text, add_blank=self.add_blank)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/data/text_mel_datamodule.py", line 217, in get_text
+    text_norm, cleaned_text = text_to_sequence(text, self.cleaners)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/__init__.py", line 20, in text_to_sequence
+    clean_text = _clean_text(text, cleaner_names)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/__init__.py", line 52, in _clean_text
+    text = cleaner(text)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/cleaners.py", line 109, in english_cleaners2
+    print(f"⚠️ Phonemization CRITICAL FAILURE: {e}")
+OSError: [Errno 28] No space left on device
+
+[2026-04-10 07:07:59,856][matcha.utils.utils][INFO] - Output dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/accent
+Error executing job with overrides: ['experiment=accent', 'task_name=finetune', 'run_name=accent', 'trainer.max_epochs=1000', '+trainer.log_every_n_steps=1', 'callbacks.model_checkpoint.every_n_epochs=100', 'ckpt_path=/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha_vctk.ckpt']
+Traceback (most recent call last):
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/train_accent.py", line 173, in main
+    metric_dict, _ = train(cfg)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/utils/utils.py", line 87, in wrap
+    raise ex
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/utils/utils.py", line 77, in wrap
+    metric_dict, object_dict = task_func(cfg=cfg)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/train_accent.py", line 139, in train
+    trainer.fit(model=model, datamodule=datamodule, ckpt_path=None, weights_only=False)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 584, in fit
+    call._call_and_handle_interrupt(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/call.py", line 49, in _call_and_handle_interrupt
+    return trainer_fn(*args, **kwargs)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 630, in _fit_impl
+    self._run(model, ckpt_path=ckpt_path, weights_only=weights_only)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1079, in _run
+    results = self._run_stage()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/trainer/trainer.py", line 1123, in _run_stage
+    self.fit_loop.run()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 217, in run
+    self.advance()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fit_loop.py", line 465, in advance
+    self.epoch_loop.run(self._data_fetcher)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 153, in run
+    self.advance(data_fetcher)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/training_epoch_loop.py", line 311, in advance
+    batch, _, __ = next(data_fetcher)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 134, in __next__
+    batch = super().__next__()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/loops/fetchers.py", line 61, in __next__
+    batch = next(self.iterator)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 341, in __next__
+    out = next(self._iterator)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/utilities/combined_loader.py", line 78, in __next__
+    out[i] = next(self.iterators[i])
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 733, in __next__
+    data = self._next_data()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1488, in _next_data
+    return self._process_data(data, worker_id)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 1550, in _process_data
+    data.reraise()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/_utils.py", line 750, in reraise
+    raise exception
+OSError: Caught OSError in DataLoader worker process 1.
+Original Traceback (most recent call last):
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/cleaners.py", line 97, in english_cleaners2
+    phonemes = phonemize(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/phonemize.py", line 206, in phonemize
+    phonemizer = BACKENDS[backend](
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/espeak.py", line 45, in __init__
+    super().__init__(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/base.py", line 39, in __init__
+    super().__init__(
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/base.py", line 76, in __init__
+    if not self.is_available():
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/base.py", line 87, in is_available
+    EspeakWrapper()
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/wrapper.py", line 60, in __init__
+    self._espeak = EspeakAPI(self.library())
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/phonemizer/backend/espeak/api.py", line 80, in __init__
+    shutil.copy(library_path, espeak_copy, follow_symlinks=False)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 417, in copy
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 267, in copyfile
+    _fastcopy_sendfile(fsrc, fdst)
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 156, in _fastcopy_sendfile
+    raise err from None
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/shutil.py", line 142, in _fastcopy_sendfile
+    sent = os.sendfile(outfd, infd, offset, blocksize)
+OSError: [Errno 28] No space left on device: '/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so.1.52.0.1' -> '/var/tmp/pbs.2150668.pbs-7/tmpj9ppm3n3/libespeak-ng.so.1.52.0.1'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/_utils/worker.py", line 349, in _worker_loop
+    data = fetcher.fetch(index)  # type: ignore[possibly-undefined]
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/torch/utils/data/_utils/fetch.py", line 52, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/data/text_mel_datamodule.py", line 224, in __getitem__
+    datapoint = self.get_datapoint(self.filepaths_and_text[index])
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/data/text_mel_datamodule.py", line 175, in get_datapoint
+    text, cleaned_text = self.get_text(text, add_blank=self.add_blank)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/data/text_mel_datamodule.py", line 217, in get_text
+    text_norm, cleaned_text = text_to_sequence(text, self.cleaners)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/__init__.py", line 20, in text_to_sequence
+    clean_text = _clean_text(text, cleaner_names)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/__init__.py", line 52, in _clean_text
+    text = cleaner(text)
+  File "/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/matcha/text/cleaners.py", line 109, in english_cleaners2
+    print(f"⚠️ Phonemization CRITICAL FAILURE: {e}")
+OSError: [Errno 28] No space left on device
+
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.
+
+====================================
+CPU Time used: 12:51:32
+CPU Percent: 276%
+Memory usage: 25165824kb
+Approx Power usage: 0.15419999999999998
+Walltime usage: 05:04:25
+
+====================================

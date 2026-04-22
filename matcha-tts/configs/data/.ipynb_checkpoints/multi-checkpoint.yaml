@@ -1,0 +1,22 @@
+_target_: matcha.data.text_mel_datamodule.TextMelDataModule
+name: multi
+train_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/master_train.txt
+valid_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/master_val.txt
+batch_size: 32
+num_workers: 4
+pin_memory: True
+cleaners: [english_cleaners2]
+add_blank: True
+n_spks: 3
+n_fft: 1024
+n_feats: 80
+sample_rate: 22050
+hop_length: 256
+win_length: 1024
+f_min: 0
+f_max: 8000
+data_statistics:
+  mel_mean: -0.842103
+  mel_std: 1.573202
+seed: 1234
+load_durations: False

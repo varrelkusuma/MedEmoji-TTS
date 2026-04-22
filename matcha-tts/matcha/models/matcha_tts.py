@@ -75,7 +75,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
 
         self.update_data_statistics(data_statistics)
     @torch.inference_mode()
-    def synthesise(self, x, x_lengths, n_timesteps, temperature=1.0, spks=None, length_scale=1.0):
+    def synthesise(self, x, x_lengths, n_timesteps, temperature=1.0, spks=None, length_scale=1.0, latent_shift=None, alpha=1.0):
         """
         Generates mel-spectrogram from text. Returns:
             1. encoder outputs
@@ -93,6 +93,8 @@ class MatchaTTS(BaseLightningClass):  # 🍵
                 shape: (batch_size,)
             length_scale (float, optional): controls speech pace.
                 Increase value to slow down generated speech and vice versa.
+            latent_shift (torch.Tensor, optional): The extracted emotion/accent vector to apply.
+            alpha (float, optional): The intensity multiplier for the latent shift.
 
         Returns:
             dict: {
@@ -116,11 +118,20 @@ class MatchaTTS(BaseLightningClass):  # 🍵
         if self.n_spks > 1 and spks is not None:
             # Get speaker embedding
             spks = self.spk_emb(spks.long())
+            
+            # --- Adding vector injection ---
+            if latent_shift is not None:
+                # Ensure the vector is on the same device as the model (CPU/GPU)
+                shift_tensor = latent_shift.to(spks.device).squeeze()
+                # Mathematically shift the vocal tract!
+                spks = spks + (shift_tensor * alpha)
+            # -------------------------------------
         else:
             spks = None
 
         # Get encoder_outputs `mu_x` and log-scaled token durations `logw`
         mu_x, logw, x_mask = self.encoder(x, x_lengths, spks)
+        
         w = torch.exp(logw) * x_mask
         w_ceil = torch.ceil(w) * length_scale
         y_lengths = torch.clamp_min(torch.sum(w_ceil, [1, 2]), 1).long()
@@ -151,7 +162,7 @@ class MatchaTTS(BaseLightningClass):  # 🍵
             "mel": denormalize(decoder_outputs, self.mel_mean, self.mel_std),
             "mel_lengths": y_lengths,
             "rtf": rtf,
-        }       
+        }   
 
     def forward(self, x, x_lengths, y, y_lengths, spks=None, out_size=None, cond=None, durations=None):
         """

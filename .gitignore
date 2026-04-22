@@ -1,3 +1,7 @@
 # fine-tuned model folder
 matcha-tts/checkpoints/
 matcha-tts/logs
+tmp/
+
+.conda/
+.gradio/
