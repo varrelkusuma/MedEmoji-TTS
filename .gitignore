@@ -5,3 +5,4 @@ tmp/
 
 .conda/
 .gradio/
+.ipynb_checkpoints/

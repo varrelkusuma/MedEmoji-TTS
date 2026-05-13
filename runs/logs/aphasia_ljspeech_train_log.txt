@@ -1,0 +1,244 @@
+🚀 Job started at Sat  9 May 22:14:16 BST 2026
+📂 Current directory: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts
+🐍 Using python: /rds/general/user/ak8224/home/miniforge3/envs/emojivoice/bin/python
+[2026-05-09 22:15:50,558][matcha.utils.utils][INFO] - Enforcing tags! <cfg.extras.enforce_tags=True>
+[2026-05-09 22:15:50,563][matcha.utils.utils][INFO] - Printing config tree with Rich! <cfg.extras.print_config=True>
+CONFIG
+├── data
+│   └── _target_: matcha.data.text_mel_datamodule.TextMelDataModule             
+│       name: aphasia_ljspeech                                                  
+│       train_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/aph
+│       valid_filelist_path: /rds/general/user/ak8224/home/MedEmoji-TTS/data/aph
+│       batch_size: 8                                                           
+│       num_workers: 4                                                          
+│       pin_memory: true                                                        
+│       cleaners:                                                               
+│       - english_cleaners2                                                     
+│       add_blank: true                                                         
+│       n_spks: 1                                                               
+│       n_fft: 1024                                                             
+│       n_feats: 80                                                             
+│       sample_rate: 22050                                                      
+│       hop_length: 256                                                         
+│       win_length: 1024                                                        
+│       f_min: 0                                                                
+│       f_max: 8000                                                             
+│       data_statistics:                                                        
+│         mel_mean: -1.355639                                                   
+│         mel_std: 1.636346                                                     
+│       seed: 1234                                                              
+│       load_durations: false                                                   
+│                                                                               
+├── model
+│   └── _target_: matcha.models.matcha_tts.MatchaTTS                            
+│       n_vocab: 198                                                            
+│       n_spks: 1                                                               
+│       spk_emb_dim: 64                                                         
+│       n_feats: 80                                                             
+│       data_statistics:                                                        
+│         mel_mean: -1.355639                                                   
+│         mel_std: 1.636346                                                     
+│       out_size: null                                                          
+│       prior_loss: true                                                        
+│       use_precomputed_durations: false                                        
+│       encoder:                                                                
+│         encoder_type: RoPE Encoder                                            
+│         encoder_params:                                                       
+│           n_feats: 80                                                         
+│           n_channels: 192                                                     
+│           filter_channels: 768                                                
+│           filter_channels_dp: 256                                             
+│           n_heads: 2                                                          
+│           n_layers: 6                                                         
+│           kernel_size: 3                                                      
+│           p_dropout: 0.1                                                      
+│           spk_emb_dim: 64                                                     
+│           n_spks: 1                                                           
+│           prenet: true                                                        
+│           hidden_channels: 256                                                
+│         duration_predictor_params:                                            
+│           filter_channels_dp: 256                                             
+│           kernel_size: 3                                                      
+│           p_dropout: 0.1                                                      
+│         n_feats: 80                                                           
+│         n_spks: 1                                                             
+│       decoder:                                                                
+│         channels:                                                             
+│         - 256                                                                 
+│         - 256                                                                 
+│         dropout: 0.05                                                         
+│         attention_head_dim: 64                                                
+│         n_blocks: 1                                                           
+│         num_mid_blocks: 2                                                     
+│         num_heads: 2                                                          
+│         act_fn: snakebeta                                                     
+│       cfm:                                                                    
+│         name: CFM                                                             
+│         solver: euler                                                         
+│         sigma_min: 0.0001                                                     
+│       optimizer:                                                              
+│         _target_: torch.optim.Adam                                            
+│         _partial_: true                                                       
+│         lr: 5.0e-05                                                           
+│         weight_decay: 0.0                                                     
+│                                                                               
+├── callbacks
+│   └── model_checkpoint:                                                       
+│         _target_: lightning.pytorch.callbacks.ModelCheckpoint                 
+│         dirpath: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/ap
+│         filename: checkpoint_{epoch:03d}                                      
+│         monitor: epoch                                                        
+│         verbose: false                                                        
+│         save_last: true                                                       
+│         save_top_k: 10                                                        
+│         mode: max                                                             
+│         auto_insert_metric_name: true                                         
+│         save_weights_only: false                                              
+│         every_n_train_steps: null                                             
+│         train_time_interval: null                                             
+│         every_n_epochs: 10                                                    
+│         save_on_train_epoch_end: null                                         
+│       model_summary:                                                          
+│         _target_: lightning.pytorch.callbacks.RichModelSummary                
+│         max_depth: 3                                                          
+│       rich_progress_bar:                                                      
+│         _target_: lightning.pytorch.callbacks.RichProgressBar                 
+│                                                                               
+├── logger
+│   └── tensorboard:                                                            
+│         _target_: lightning.pytorch.loggers.tensorboard.TensorBoardLogger     
+│         save_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/a
+│         name: null                                                            
+│         log_graph: false                                                      
+│         default_hp_metric: true                                               
+│         prefix: ''                                                            
+│                                                                               
+├── trainer
+│   └── _target_: lightning.pytorch.trainer.Trainer                             
+│       default_root_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/
+│       max_epochs: 50                                                          
+│       accelerator: gpu                                                        
+│       devices: 1                                                              
+│       precision: 16-mixed                                                     
+│       check_val_every_n_epoch: 1                                              
+│       deterministic: false                                                    
+│       gradient_clip_val: 1.0                                                  
+│       log_every_n_steps: 5                                                    
+│                                                                               
+├── paths
+│   └── root_dir: /rds/general/user/ak8224/home/MedEmoji-TTS                    
+│       data_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/data/              
+│       log_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/logs/               
+│       output_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/a
+│       work_dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts         
+│                                                                               
+├── extras
+│   └── ignore_warnings: false                                                  
+│       enforce_tags: true                                                      
+│       print_config: true                                                      
+│                                                                               
+├── task_name
+│   └── finetune                                                                
+├── run_name
+│   └── aphasia_ljspeech                                                        
+├── tags
+│   └── ['dev']                                                                 
+├── train
+│   └── True                                                                    
+├── test
+│   └── True                                                                    
+├── ckpt_path
+│   └── /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha
+└── seed
+    └── 1234                                                                    
+Seed set to 1234
+[2026-05-09 22:15:50,829][__main__][INFO] - Instantiating datamodule <matcha.data.text_mel_datamodule.TextMelDataModule>
+[2026-05-09 22:16:02,045][__main__][INFO] - Instantiating model <matcha.models.matcha_tts.MatchaTTS>
+/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/diffusers/models/lora.py:391: FutureWarning: `LoRACompatibleLinear` is deprecated and will be removed in version 1.0.0. Use of `LoRACompatibleLinear` is deprecated. Please switch to PEFT backend by installing PEFT: `pip install peft`.
+  deprecate("LoRACompatibleLinear", "1.0.0", deprecation_message)
+[2026-05-09 22:16:06,693][__main__][INFO] - Instantiating callbacks...
+[2026-05-09 22:16:06,694][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.ModelCheckpoint>
+[2026-05-09 22:16:06,708][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichModelSummary>
+[2026-05-09 22:16:06,708][matcha.utils.instantiators][INFO] - Instantiating callback <lightning.pytorch.callbacks.RichProgressBar>
+[2026-05-09 22:16:06,709][__main__][INFO] - Instantiating loggers...
+[2026-05-09 22:16:06,709][matcha.utils.instantiators][INFO] - Instantiating logger <lightning.pytorch.loggers.tensorboard.TensorBoardLogger>
+[2026-05-09 22:16:06,711][__main__][INFO] - Instantiating trainer <lightning.pytorch.trainer.Trainer>
+Using 16bit Automatic Mixed Precision (AMP)
+Trainer already configured with model summary callbacks: [<class 'lightning.pytorch.callbacks.rich_model_summary.RichModelSummary'>]. Skipping setting a default `ModelSummary` callback.
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+[2026-05-09 22:16:06,906][__main__][INFO] - Logging hyperparameters!
+[2026-05-09 22:16:09,067][__main__][INFO] - Starting training!
+[2026-05-09 22:16:09,068][__main__][INFO] - 💉 Injecting pre-trained LJSpeech weights from: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha_ljspeech.ckpt
+[2026-05-09 22:16:10,528][__main__][INFO] - ✂️ Grafting Vocab: torch.Size([178, 192]) -> torch.Size([198, 192])
+[2026-05-09 22:16:10,543][__main__][INFO] - ✅ Pre-trained weights successfully loaded!
+[2026-05-09 22:16:10,543][__main__][INFO] - 🚀 Launching Trainer.fit from Epoch 0...
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [GPU-14bf6a73-4a6d-b063-5b43-ef8efb7a47fe]
+/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/python3.10/site-packages/lightning/pytorch/utilities/model_summary/model_summary.py:242: Precision 16-mixed is not supported by the model summary.  Estimated model size in MB will not be accurate. Using 32 bits instead.
+┏━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃    ┃ Name                              ┃ Type       ┃ Params ┃ Mode  ┃ FLOPs ┃
+┡━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│ 0  │ encoder                           │ TextEncod… │  7.2 M │ train │     0 │
+│ 1  │ encoder.emb                       │ Embedding  │ 38.0 K │ train │     0 │
+│ 2  │ encoder.prenet                    │ ConvReluN… │  591 K │ train │     0 │
+│ 3  │ encoder.prenet.conv_layers        │ ModuleList │  553 K │ train │     0 │
+│ 4  │ encoder.prenet.norm_layers        │ ModuleList │  1.2 K │ train │     0 │
+│ 5  │ encoder.prenet.relu_drop          │ Sequential │      0 │ train │     0 │
+│ 6  │ encoder.prenet.proj               │ Conv1d     │ 37.1 K │ train │     0 │
+│ 7  │ encoder.encoder                   │ Encoder    │  6.2 M │ train │     0 │
+│ 8  │ encoder.encoder.drop              │ Dropout    │      0 │ train │     0 │
+│ 9  │ encoder.encoder.attn_layers       │ ModuleList │  889 K │ train │     0 │
+│ 10 │ encoder.encoder.norm_layers_1     │ ModuleList │  2.3 K │ train │     0 │
+│ 11 │ encoder.encoder.ffn_layers        │ ModuleList │  5.3 M │ train │     0 │
+│ 12 │ encoder.encoder.norm_layers_2     │ ModuleList │  2.3 K │ train │     0 │
+│ 13 │ encoder.proj_m                    │ Conv1d     │ 15.4 K │ train │     0 │
+│ 14 │ encoder.proj_w                    │ DurationP… │  345 K │ train │     0 │
+│ 15 │ encoder.proj_w.drop               │ Dropout    │      0 │ train │     0 │
+│ 16 │ encoder.proj_w.conv_1             │ Conv1d     │  147 K │ train │     0 │
+│ 17 │ encoder.proj_w.norm_1             │ LayerNorm  │    512 │ train │     0 │
+│ 18 │ encoder.proj_w.conv_2             │ Conv1d     │  196 K │ train │     0 │
+│ 19 │ encoder.proj_w.norm_2             │ LayerNorm  │    512 │ train │     0 │
+│ 20 │ encoder.proj_w.proj               │ Conv1d     │    257 │ train │     0 │
+│ 21 │ decoder                           │ CFM        │ 11.0 M │ train │     0 │
+│ 22 │ decoder.estimator                 │ Decoder    │ 11.0 M │ train │     0 │
+│ 23 │ decoder.estimator.time_embeddings │ Sinusoida… │      0 │ train │     0 │
+│ 24 │ decoder.estimator.time_mlp        │ TimestepE… │  1.2 M │ train │     0 │
+│ 25 │ decoder.estimator.down_blocks     │ ModuleList │  3.1 M │ train │     0 │
+│ 26 │ decoder.estimator.mid_blocks      │ ModuleList │  2.8 M │ train │     0 │
+│ 27 │ decoder.estimator.up_blocks       │ ModuleList │  3.7 M │ train │     0 │
+│ 28 │ decoder.estimator.final_block     │ Block1D    │  197 K │ train │     0 │
+│ 29 │ decoder.estimator.final_proj      │ Conv1d     │ 20.6 K │ train │     0 │
+└────┴───────────────────────────────────┴────────────┴────────┴───────┴───────┘
+Trainable params: 18.2 M                                                        
+Non-trainable params: 0                                                         
+Total params: 18.2 M                                                            
+Total estimated model params size (MB): 72                                      
+Modules in train mode: 333                                                      
+Modules in eval mode: 0                                                         
+Total FLOPs: 0                                                                  
+`Trainer.fit` stopped: `max_epochs=50` reached.
+Epoch 49/49 ━━━━━━━━━━━━━━━━━━ 9/9 0:00:02 • 0:00:00 4.40it/s v_num: 0.000 step:
+                                                              449.000           
+                                                              loss/train_step:  
+                                                              6.722             
+                                                              loss/val_step:    
+                                                              6.708             
+                                                              loss/val_epoch:   
+                                                              6.708             
+                                                              loss/train_epoch: 
+                                                              6.237             
+[2026-05-09 22:20:41,695][__main__][INFO] - Starting testing!
+🎉 Training complete! Skipping formal test_step as it is not defined.
+[2026-05-09 22:20:41,695][__main__][INFO] - Best ckpt path: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/aphasia_ljspeech/checkpoints/checkpoint_epoch=049.ckpt
+[2026-05-09 22:20:41,699][matcha.utils.utils][INFO] - Output dir: /rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/logs/aphasia_ljspeech
+[2026-05-09 22:20:41,700][matcha.utils.utils][INFO] - Metric name is None! Skipping metric value retrieval...
+
+====================================
+CPU Time used: 00:06:17
+CPU Percent: 179%
+Memory usage: 7536984kb
+Approx Power usage: 0.0012000000000000001
+Walltime usage: 00:06:32
+
+====================================

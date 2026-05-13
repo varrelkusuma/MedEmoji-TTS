@@ -108,13 +108,11 @@ def train(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
                         new_w = model_dict[k].clone()
                         min_d = min(v.shape[1], model_dict[k].shape[1])
 
-                        vctk_aphasia_match = 2
-                        vctk_dementia_match = 36
-                        vctk_asd_match = 46
+                        vctk_aphasia_man_match = 2
+                        vctk_aphasia_woman_match = 36
 
-                        new_w[0, :min_d] = v[vctk_aphasia_match, :min_d]
-                        new_w[1, :min_d] = v[vctk_dementia_match, :min_d]
-                        new_w[2, :min_d] = v[vctk_asd_match, :min_d]
+                        new_w[0, :min_d] = v[vctk_aphasia_man_match, :min_d]
+                        new_w[1, :min_d] = v[vctk_aphasia_woman_match, :min_d]
                         new_state_dict[k] = new_w
                         
                     else:

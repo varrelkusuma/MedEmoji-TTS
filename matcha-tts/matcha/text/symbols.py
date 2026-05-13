@@ -9,9 +9,12 @@ _letters_ipa = (
     "ɑɐɒæɓʙβɔɕçɗɖðʤəɘɚɛɜɝɞɟʄɡɠɢʛɦɧħɥʜɨɪʝɭɬɫɮʟɱɯɰŋɳɲɴøɵɸθœɶʘɹɺɾɻʀʁɽʂʃʈʧʉʊʋⱱʌɣɤʍχʎʏʑʐʒʔʡʕʢǀǁǂǃˈˌːˑʼʴʰʱʲʷˠˤ˞↓↑→↗↘'̩'ᵻ'̃'-'̞ᵝʨʦũĩʣʥ%+]\\()["
 )
 
+# Define your new custom tokens safely here:
+_custom_clinical = "@#*~"
 
-# Export all symbols:
-symbols = [_pad] + list(_punctuation) + list(_letters) + list(_letters_ipa)
+
+# Export all symbols: Concatenate the custom tokens at the VERY END
+symbols = [_pad] + list(_punctuation) + list(_letters) + list(_letters_ipa) + list(_custom_clinical)
 
 # Special symbol ids
 SPACE_ID = symbols.index(" ")

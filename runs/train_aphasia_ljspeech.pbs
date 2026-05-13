@@ -1,0 +1,38 @@
+#PBS -l select=1:ncpus=4:mem=24gb:ngpus=1:gpu_type=RTX6000
+#PBS -l walltime=24:00:00
+#PBS -N aphasia_ljspeech_train
+#PBS -j oe
+#PBS -o /rds/general/user/ak8224/home/MedEmoji-TTS/runs/logs/aphasia_ljspeech_train_log.txt
+
+# 1. Setup Paths
+PROJECT_ROOT=/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts
+cd $PROJECT_ROOT
+
+echo "🚀 Job started at $(date)"
+echo "📂 Current directory: $(pwd)"
+
+# 2. Environment (Miniforge path)
+source /rds/general/user/ak8224/home/miniforge3/etc/profile.d/conda.sh
+conda activate emojivoice
+
+echo "🐍 Using python: $(which python)"
+
+# 3. Pathing & Imports
+export PYTHONPATH=$PROJECT_ROOT:$PYTHONPATH
+export ESPEAK_DATA_PATH=/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/share/espeak-ng-data
+export PHONEMIZER_ESPEAK_LIBRARY=/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib/libespeak-ng.so
+export PHONEMIZER_ESPEAK_PATH=/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/bin/espeak-ng
+export LD_LIBRARY_PATH=/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/lib:$LD_LIBRARY_PATH
+export PATH=/rds/general/user/ak8224/home/miniforge3/envs/emojivoice/bin:$PATH
+export PYTHONUNBUFFERED=1
+
+# 4. Launch Training
+python matcha/train_ljspeech.py \
+    experiment=aphasia_ljspeech \
+    task_name="finetune" \
+    run_name="aphasia_ljspeech" \
+    hydra.run.dir=$PROJECT_ROOT/logs/aphasia_ljspeech \
+    trainer.max_epochs=50 \
+    +trainer.log_every_n_steps=5 \
+    callbacks.model_checkpoint.every_n_epochs=10 \
+    ckpt_path=/rds/general/user/ak8224/home/MedEmoji-TTS/matcha-tts/checkpoints/matcha_ljspeech.ckpt
